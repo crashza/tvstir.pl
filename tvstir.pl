@@ -24,8 +24,10 @@ GetOptions  ('help|?!' => \my $help,
 	     'directory=s' => \my $directory,
 	     'output=s' => \my $output);
 
+my $version = 'v0.1'
+
 if ($help) { 
-	print "TV Series Organizer v0.0\n";
+	print "TV Series Organizer $version\n";
 	print "Release 28 June 2013\n";
 	print "tvstir.pl  - Move TV Shows into formatted directories\n";
 	print "\n";
@@ -42,7 +44,7 @@ if ($help) {
 };
 
 if ($showversion) {
-	print "tvstir.pl v0.0 2013\n";
+	print "tvstir.pl $version\n";
 	exit;
 	} 
 
