@@ -24,7 +24,7 @@ GetOptions  ('help|?!' => \my $help,
 	     'directory=s' => \my $directory,
 	     'output=s' => \my $output);
 
-my $version = 'v0.1'
+my $version = 'v0.1';
 
 if ($help) { 
 	print "TV Series Organizer $version\n";
@@ -172,10 +172,13 @@ sub getseries {
 			my $id = <>;
 			chomp($id);
 			my $options = $elements-1;
-			while ( $id gt $options or $id lt 0 ) {
+			my $validselect = 0;
+			if ( $id < $options and $id > 0 ) { $validselect = 1 };
+			while ( $validselect != 1 ) {
 				print "Incorrect selection please re-enter:";
 				$id = <>;
 				chomp($id);
+				if ( $id < $options and $id > 0 ) { $validselect = 1 } ;
 				}
 			print "\n";
 			$name = $show->[$id]->{SeriesName}->[0];
