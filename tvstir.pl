@@ -169,6 +169,12 @@ sub getseries {
 			print "Enter selection:";
 			my $id = <>;
 			chomp($id);
+			my $options = $elements-1;
+			while ( $id gt $options or $id lt 0 ) {
+				print "Incorrect selection please re-enter:";
+				$id = <>;
+				chomp($id);
+				}
 			print "\n";
 			$name = $show->[$id]->{SeriesName}->[0];
 			}else{ 
