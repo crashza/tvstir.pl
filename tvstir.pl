@@ -5,16 +5,20 @@
 # into formatted directories as below
 # ----TV Show->Season X
 # Burn.Notice.S07E04.HDTV.x264-KILLERS.mp4
+# 
+# Copyright 2013 Trevor Steyn
+# This program is distributed under the terms of the GNU General Public License
 #
 
 use warnings;
 use strict;
-use Getopt::Long;    # Used for CLI args
+
 use Cwd;
-use Data::Dumper;    # debugging only
 use LWP::Simple;
 use XML::Simple;
 use Text::Table;
+use Data::Dumper;        # Debugging only
+use Getopt::Long;        # Used for CLI args
 
 GetOptions(
     'help|?!'     => \my $help,
@@ -22,10 +26,14 @@ GetOptions(
     'lucky'       => \my $lucky,
     'write'       => \my $write,
     'directory=s' => \my $directory,
-    'output=s'    => \my $output
+    'output=s'    => \my $output,
 );
 
+# Set Version
+
 my $version = 'v0.1';
+
+# Help Menu
 
 if ($help) {
     print "TV Series Organizer $version\n";
@@ -39,23 +47,25 @@ if ($help) {
     print
 "  --write	| -w		Actually move files (Default is to print changes only)\n";
     print
-      "  --directory	| -w		Directory to check for TV shows (Default is pwd)\n";
+      "  --directory	| -d		Directory to check for TV shows (Default is pwd)\n";
     print "  --output	| -o		Directory to write changes default is pwd\n";
     print "  --version			Print the current version\n";
     print "  --lucky			Use first hit on the TVDB\n\n";
     exit;
 }
 
+# Show Version and exit
+
 if ($showversion) {
     print "tvstir.pl $version\n";
     exit;
 }
 
-#Lets set the directory that we need to work on
+# Lets set the directory that we need to work on
 
 if ( !$directory ) { $directory = getcwd }
 
-#Slurp up the files in the directory
+# Slurp up the files in the directory
 
 my @files;
 
@@ -70,31 +80,32 @@ while ( my $file = readdir(DIR) ) {
     }
 }
 
+# Try find matching TV show and season 
+
 my $season;
 my $tvshow;
 my %matched;
 my %unmatched;
 my %tvseason;
-foreach (@files) {
-    $season = getseason($_);
-    $tvshow = getseries($_);
+foreach my $filename (@files) {
+    $season = getseason($filename);
+    $tvshow = getseries($filename);
     if ( $tvshow eq 'No Matching TV Show' ) {
-        $unmatched{$_} = 'No Matching TV Show';
+        $unmatched{$filename} = 'No Matching TV Show';
     }
     else {
-        $matched{$_}  = $tvshow;
-        $tvseason{$_} = $season;
+        $matched{$filename}  = $tvshow;
+        $tvseason{$filename} = $season;
 
-        #print "$_ has been detected as TV Show:\t\t$tvshow\n"
     }
 }
 
 # Lets Print the Results
+
 print "\n";
 my $matchtb =
   Text::Table->new( "File\n----", "TV Show\n-- ----", "Season\n------" );
 my $unmatchtb = Text::Table->new( "File\n----", "Reason\n------", );
-
 foreach my $key ( keys %matched ) {
     $matchtb->load(
         [ "$key    ", "$matched{$key}    ", "$tvseason{$key}    " ] );
@@ -103,20 +114,22 @@ foreach my $key ( keys %matched ) {
 foreach my $key ( keys %unmatched ) {
     $unmatchtb->load( [ "$key    ", "$unmatched{$key}" ] );
 }
-print "=" x 60, "\n";
+print "=" x 78, "\n";
 print "Matched Shows:\n";
-print "=" x 60, "\n";
+print "=" x 78, "\n";
 print $matchtb;
 print "\n";
-print "=" x 60, "\n";
+print "=" x 78, "\n";
 print "Unmatched Shows:\n";
-print "=" x 60, "\n";
+print "=" x 78, "\n";
 print $unmatchtb;
 print "\n";
 
 # Set output dir
 
 if ( !$output ) { $output = getcwd }
+
+# If --write is passed creat the directory structure and move files
 
 if ($write) {
     foreach my $key ( keys %matched ) {
@@ -133,6 +146,8 @@ if ($write) {
 else {
     print "Use --write to write changes\n\n";
 }
+
+# Subroutines
 
 sub getseries {
     my $name = $_[0];
