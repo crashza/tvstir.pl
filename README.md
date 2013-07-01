@@ -16,12 +16,12 @@ the current working directory and move the file into this dir
 
 The only naming conventions currently supported are
 
-Burn.NoticeS01E02.tags.mp4
+Burn.Notice.S01E02.tags.mp4
 
-Burn.Notice102.tags.mp4
+Burn.Notice.102.tags.mp4
 
 TODO
 
-Add a preference file for TVSHOW's for unnatended stirs
+Add a preference file for TVSHOW's for unatended stirs
 
 Add more file naming convention formats 
