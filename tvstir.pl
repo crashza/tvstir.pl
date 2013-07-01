@@ -4,7 +4,6 @@
 # tvstir.pl simple script to move TV Shows
 # into formatted directories as below
 # ----TV Show->Season X
-# Burn.Notice.S07E04.HDTV.x264-KILLERS.mp4
 # 
 # Copyright 2013 Trevor Steyn
 # This program is distributed under the terms of the GNU General Public License
@@ -19,6 +18,8 @@ use XML::Simple;
 use Text::Table;
 use Data::Dumper;        # Debugging only
 use Getopt::Long;        # Used for CLI args
+use Term::ANSIColor;     # Fancy colours
+
 
 GetOptions(
     'help|?!'     => \my $help,
@@ -42,15 +43,15 @@ if ($help) {
     print "\n";
     print "Usage: tvstir.pl [OPTIONS]\n";
     print "\n";
-    print "Input options:\n";
-    print "  --help 	| -h		Print this help menu\n";
+    print "Options:\n";
+    print "  --help 		| -h		Print this help menu\n";
+    print "  --version		| -v		Print the current version\n";
+    print "  --lucky		| -l		Use first hit on the TVDB\n";
     print
-"  --write	| -w		Actually move files (Default is to print changes only)\n";
+"  --write		| -w		Actually move files (Default is to print changes only)\n";
     print
-      "  --directory	| -d		Directory to check for TV shows (Default is pwd)\n";
-    print "  --output	| -o		Directory to write changes default is pwd\n";
-    print "  --version			Print the current version\n";
-    print "  --lucky			Use first hit on the TVDB\n\n";
+      "  --directory <path>	| -d		Directory to check for TV shows (Default is pwd)\n";
+    print "  --output <path>	| -o		Directory to write changes default is pwd\n\n";
     exit;
 }
 
@@ -144,7 +145,7 @@ if ($write) {
     }
 }
 else {
-    print "Use --write to write changes\n\n";
+    print color("red"), "Use --write to write changes\n\n", color("reset");
 }
 
 # Subroutines
@@ -177,7 +178,7 @@ sub getseries {
 
             if ( $elements gt '1' and !$lucky ) {
 
-                print "\nMore than one TV show found for $_[0]\n\n";
+                print  color("yellow"), "\nMore than one TV show found for $_[0]\n\n", color("reset");
                 my $count = 0;
                 foreach ( @{$show} ) {
                     print "$count: \t$_->{SeriesName}->[0]\n";
@@ -192,7 +193,7 @@ sub getseries {
                 if ( $id le $options and $id ge 0 ) { $validselect = 1 }
 
                 while ( $validselect != 1 ) {
-                    print "Incorrect selection please re-enter:";
+                    print color("red"), "Incorrect selection please re-enter:" ,color("reset");
                     $id = <>;
                     chomp($id);
                     if ( $id le $options and $id ge 0 ) { $validselect = 1 }
