@@ -26,6 +26,7 @@ GetOptions(
     'version'     => \my $showversion,
     'lucky'       => \my $lucky,
     'write'       => \my $write,
+    'noseason|n'    => \my $noseason,
     'directory=s' => \my $directory,
     'output=s'    => \my $output,
 );
@@ -50,8 +51,10 @@ if ($help) {
     print
 "  --write		| -w		Actually move files (Default is to print changes only)\n";
     print
-      "  --directory <path>	| -d		Directory to check for TV shows (Default is pwd)\n";
-    print "  --output <path>	| -o		Directory to write changes default is pwd\n\n";
+      "  --directory <path>	| -d		Directory to check for TV shows (Default is pwd)\n\n";
+    print "Output options:\n";
+    print "  --output <path>	| -o		Directory to write changes default is pwd\n";
+    print "  --noseason 		| -n		Dont create a season folder\n\n";
     exit;
 }
 
@@ -130,18 +133,23 @@ print "\n";
 
 if ( !$output ) { $output = getcwd }
 
-# If --write is passed creat the directory structure and move files
+# If --write is passed create the directory structure and move files
 
 if ($write) {
     foreach my $key ( keys %matched ) {
         if ( !-d "$output/$matched{$key}" ) {
             mkdir "$output/$matched{$key}", 0777;
         }
-        if ( !-d "$output/$matched{$key}/Season $tvseason{$key}" ) {
-            mkdir "$output/$matched{$key}//Season $tvseason{$key}", 0777;
-        }
-        rename "$directory/$key",
-          "$output/$matched{$key}/Season $tvseason{$key}/$key";
+	if (!$noseason) {
+            if ( !-d "$output/$matched{$key}/Season $tvseason{$key}" ) {
+                mkdir "$output/$matched{$key}//Season $tvseason{$key}", 0777;
+            }
+            rename "$directory/$key",
+              "$output/$matched{$key}/Season $tvseason{$key}/$key";
+	}
+	else {
+            rename "$directory/$key","$output/$matched{$key}/$key";
+	}
     }
 }
 else {
