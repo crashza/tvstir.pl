@@ -43,6 +43,7 @@ my $version = 'v0.11';
 if ($help) {
     print "TV Series Organizer $version\n";
     print "Release 28 June 2013\n";
+    print "https://github.com/crashza/tvstir.pl\n";
     print "tvstir.pl  - Move TV Shows into formatted directories\n";
     print "\n";
     print "Usage: tvstir.pl [OPTIONS]\n";
@@ -237,6 +238,7 @@ sub getseries {
             my $content =
               get("http://thetvdb.com/api/GetSeries.php?seriesname=$name");
             die "Couldn't get it!" unless defined $content;
+            $content =~ s/\x{2019}/’/g;
             my $inxml = $xml->XMLin($content);
             my $show  = $inxml->{Data}->[0]->{Series};
             if ( !$show ) {
