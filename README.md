@@ -1,6 +1,8 @@
 tvstir.pl
 =========
 
+Organize your TV shows into the correct directory structure
+
 Perl script to move tv series into organized directories
 At present the only output format is 
 
