@@ -32,6 +32,7 @@ GetOptions(
     'directory=s'    => \my $directory,
     'output=s'       => \my $output,
     'preference|p=s' => \my $preference,
+    'exclude|e=s'    => \my @exclude,
 );
 
 # Set Version
@@ -56,7 +57,9 @@ if ($help) {
 "  --write		| -w		Actually move files (Default is to print changes only)\n";
     print "  --copy		| -c		Dont Move files rather copy files needs --write\n";
     print
-"  --directory <path>	| -d		Directory to check for TV shows (Default is pwd)\n\n";
+"  --directory <path>	| -d		Directory to check for TV shows (Default is pwd)\n";
+    print
+"  --exclude <regexp>	| -e            Exclude file from the script, perl regexp supported\n\n";
     print "Output options:\n";
     print "  --output <path>	| -o		Directory to write changes default is pwd\n";
     print "  --noseason 		| -n		Dont create a season folder\n\n";
@@ -113,15 +116,23 @@ my %matched;
 my %unmatched;
 my %tvseason;
 foreach my $filename (@files) {
-    $season = getseason($filename);
-    $tvshow = getseries($filename);
-    if ( $tvshow eq 'No Matching TV Show' ) {
-        $unmatched{$filename} = 'No Matching TV Show';
+    my $excludefile = 0;
+    foreach my $exclude_pattern (@exclude) {
+        if ( $filename =~ m/$exclude_pattern/ ) {
+            $excludefile = 1;
+        }
     }
-    else {
-        $matched{$filename}  = $tvshow;
-        $tvseason{$filename} = $season;
+    if ( $excludefile == 0 ) {
+        $season = getseason($filename);
+        $tvshow = getseries($filename);
+        if ( $tvshow eq 'No Matching TV Show' ) {
+            $unmatched{$filename} = 'No Matching TV Show';
+        }
+        else {
+            $matched{$filename}  = $tvshow;
+            $tvseason{$filename} = $season;
 
+        }
     }
 }
 
