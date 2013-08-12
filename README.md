@@ -22,8 +22,11 @@ Burn.Notice.S01E02.tags.mp4
 
 Burn.Notice.102.tags.mp4
 
-TODO
 
-Add a preference file for TVSHOW's for unatended stirs
+Usage: tvstir.pl [OPTIONS]
 
-Add more file naming convention formats 
+Options:
+
+  --help        | -h    Print this help
+  
+  --version     | -v    Print the current version
