@@ -5,7 +5,7 @@
 # into formatted directories as below
 # ----TV Show->Season X
 #
-# Copyright 2013 Trevor Steyn
+# Copyright 2013 Trevor Steyn <trevor@webon.co.za>
 # This program is distributed under the terms of the GNU General Public License
 #
 
@@ -233,8 +233,8 @@ sub getseries {
         }
     }
     if ( !$showfound ) {
-        if ( $name =~ m/^.*[Ss]\d*[Ee]\d.*$/ ) {   #File Format $name.S02E12.mkv
-            $name =~ s/\.[Ss]\d*[Ee]\d.*$//;
+        if ( $name =~ m/^.*[Ss]\d\d[Ee]\d\d.*$/ ) {   #File Format $name.S02E12.mkv
+            $name =~ s/\.[Ss]\d\d[Ee]\d\d.*$//;
             $name =~ s/\./ /g;
         }
         elsif ( $name =~ m/^.*\d\d.*$/ ) {
