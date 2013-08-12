@@ -303,7 +303,6 @@ sub getseason {
     if ( $season =~ m/^.*[Ss]\d\d[Ee]\d\d.*$/ ) {
         $season =~ m/([Ss]\d\d[Ee]\d\d*)/;
         $season = $1;
-        print $1;
         $season =~ s/[Ss]//;
         $season =~ s/[Ee]\d*//;
         $season =~ s/^0//;
