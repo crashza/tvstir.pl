@@ -307,11 +307,17 @@ sub getseason {
         $season =~ s/[Ee]\d*//;
         $season =~ s/^0//;
     }
-    elsif ( $season =~ m/^.*\.\d\d\d*\..*m..$/ ) {
+    elsif ( $season =~ m/^.*\.\d\d\d*\..*$/ ) {
         $season =~ m/(\d\d*)/;
         $season = $1;
         $season =~ s/\d\d$//;
     }
+    elsif ( $season =~ m/^.*\dx\d\d.*$/ ) {
+        $season =~ m/(\dx)/;
+        $season = $1;
+        $season =~ s/x//;
+                                    }
+
     else { $season = 'ERROR'; }
 
     return $season;
